@@ -3,6 +3,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,28 +46,75 @@ public class Client extends JFrame {
                                 break;
                             }
                         }
-                        while (true) {
+                        /*while (true) {
                             String strFromServer = in.readUTF();
+
                             if (strFromServer.startsWith("/online")) {
                                 String[] logs = strFromServer.split("\\s");
                                 usersOnline = new HashSet<>();
                                 for (int i = 1; i < logs.length; i++) {
                                     usersOnline.add(logs[i]);
                                 }
-                                System.out.println("online " + usersOnline);
+                                System.out.println("online from client" + usersOnline);
                                 break;
                             }
                         }
 
-                        ChatGui chat = new ChatGui(usersOnline, name, in, out);
+                         */
+
+
+                        ChatGui chat = new ChatGui(name, in, out);
+
+
 
                         while (true) {
                             String strFromServer = in.readUTF();
+
                             if (strFromServer.equals("/end")) {
                                 break;
                             }
+
+                            /*if (strFromServer.startsWith("Client is connected")){
+                                String[] logs = strFromServer.split("\\s");
+                                chat.getOnline().append(logs[3]);
+                                chat.getOnline().append("\n");
+                            }
+
+                             */
+                            if (strFromServer.startsWith("/online")){
+                                String[] logs = strFromServer.split("\\s");
+                                for (int i=1; i<logs.length;i++){
+                                    chat.getOnline().append(logs[i]);
+                                    chat.getOnline().append("\n");
+                                }
+                            }
+                             if (strFromServer.startsWith("Client is connected")){
+                                String[] logs = strFromServer.split("\\s");
+                                chat.getOnline().append(logs[3]);
+                                chat.getOnline().append("\n");
+                            }
+
+                           /*if (strFromServer.startsWith("unsibscribe")){
+                                String [] unsibscribed = strFromServer.split("\\s");
+                                String log = unsibscribed[1];
+                                System.out.println("log"+log);
+                                String [] users=chat.getOnline().getText().split("\n");
+                                System.out.println("юзеры"+ Arrays.toString(users));
+                                for (int i=0; i<users.length;i++){
+                                    if (users[i].equals(log)) {
+                                        System.out.println("log is delited");
+                                    }else{
+                                        chat.getOnline().setText(users[i]);
+                                    }
+                                }
+                            }
+
+                            */
                             chat.getTextArea().append(strFromServer);
                             chat.getTextArea().append("\n");
+                            //FileWorker.write("C:/Users/DorozhkinaAlina/IdeaProjects/MyNewChat/src/a.txt", strFromServer);
+
+
 
                         }
                     } catch (Exception e) {

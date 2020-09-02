@@ -47,8 +47,8 @@ public class MyServer  {
 
     public synchronized void sendMsgToClient(ClientHandler from, String nickTo, String msg) {
         for (ClientHandler o : clients) {
-            if (o.getName().equals(nickTo)) {
-                o.sendMsg("от " + from.getName() + ": " + msg);
+            if (o.getRecord().getName().equals(nickTo)) {
+                o.sendMsg("от " + from.getRecord().getName() + ": " + msg);
                 from.sendMsg("клиенту " + nickTo + ": " + msg);
                 return;
             }
@@ -75,7 +75,7 @@ public class MyServer  {
 
     public synchronized void unsubscribe(ClientHandler o) {
         clients.remove(o);
-       broadcastClientsList();
+        broadcastClientsList();
     }
 
     public synchronized void subscribe(ClientHandler o) {
@@ -86,5 +86,4 @@ public class MyServer  {
         return clients;
     }
 }
-
 

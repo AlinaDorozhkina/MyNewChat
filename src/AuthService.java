@@ -52,6 +52,16 @@ public interface AuthService {
         public int hashCode() {
             return Objects.hash(id, name, login, password);
         }
+
+        @Override
+        public String toString() {
+            return "Record{" +
+                    "id=" + id +
+                    ", name='" + name + '\'' +
+                    ", login='" + login + '\'' +
+                    ", password='" + password + '\'' +
+                    '}';
+        }
     }
 
 }

@@ -26,7 +26,7 @@ public class AuthGui extends JFrame {
 
         JPanel mainPanel = new JPanel(new GridLayout(0, 2));
 
-        JPanel logPanel = new JPanel(new GridLayout(3, 1));//(new GridLayout(3, 1));
+        JPanel logPanel = new JPanel(new GridLayout(3, 1));
         logPanel.setBackground(new Color(180, 208, 210));
 
         JLabel login = new JLabel("Login");

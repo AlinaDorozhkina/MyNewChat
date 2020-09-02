@@ -16,12 +16,16 @@ public class ChatGui extends JFrame {
     private String name;
     private DataInputStream in;
     private DataOutputStream out;
+
+    public JTextArea getOnline() {
+        return online;
+    }
+
     private  JTextArea online;
     private Set<String> userOnline;
 
 
-    public ChatGui(Set<String> userOnline, String name, DataInputStream in, DataOutputStream out) {
-        this.userOnline=Set.copyOf(userOnline);
+    public ChatGui(String name, DataInputStream in, DataOutputStream out) {
         this.name=name;
         this.in=in;
         this.out=out;
@@ -41,14 +45,17 @@ public class ChatGui extends JFrame {
         textArea.setBackground(new Color(209, 231, 188));
 
         online=new JTextArea("Users are online\n");
+        /*
         for (String s : userOnline){
             online.append(s);
             online.append("\n");
         }
 
+         */
+
         online.setBackground(Color.ORANGE);
         online.setEditable(false);
-        online.setPreferredSize(new Dimension(100,100));
+
 
         JScrollPane scroll = new JScrollPane(textArea);
         jpanel.add(scroll, BorderLayout.CENTER);
