@@ -2,21 +2,19 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
-    public class ClientHandler {
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ClientHandler {
         private AuthService.Record record;
         private MyServer myServer;
         private Socket socket;
         private DataInputStream in;
         private DataOutputStream out;
-
         private String name;
 
-        public String getName() {
-            return name;
-        }
+
 
         public ClientHandler(MyServer myServer, Socket socket) {
             try {
@@ -25,16 +23,24 @@ import java.util.List;
                 this.in = new DataInputStream(socket.getInputStream());
                 this.out = new DataOutputStream(socket.getOutputStream());
                 this.name = "";
-                new Thread(() -> {
-                    try {
-                        authentication();
-                        readMessages();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } finally {
-                        closeConnection();
+                ExecutorService executorService= Executors.newFixedThreadPool(3);
+                executorService.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            authentication();
+                            readMessages();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } finally {
+                            closeConnection();
+                            System.out.println(executorService.isShutdown());
+                        }
+
                     }
-                }).start();
+                });
+                executorService.shutdown();
+
             } catch (IOException e) {
                 throw new RuntimeException("Проблемы при создании обработчика клиента");
             }
@@ -97,6 +103,7 @@ import java.util.List;
         public void closeConnection() {
             myServer.unsubscribe(this);
             myServer.broadcastMsg("unsibscribe " + this.record.getName());
+
             try {
                 System.out.println("in is closed");
                 in.close();
